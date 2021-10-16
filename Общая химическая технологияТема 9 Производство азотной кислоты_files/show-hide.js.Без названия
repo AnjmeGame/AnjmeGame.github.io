@@ -1,0 +1,164 @@
+function AddCss(a) {
+    if (-1 == dynamic_css_name.indexOf(a)) {
+        var b = document.createElement("link");
+        b.setAttribute("type", "text/css"), b.setAttribute("rel", "stylesheet"), b.setAttribute("href", "/stylesheets/" + a), b.setAttribute("media", "screen"), document.getElementsByTagName("head")[0].appendChild(b), dynamic_css_name.push(a)
+    }
+}
+
+function Show_or_Hide_Subling(a) {
+    a = $(a.parentNode);
+    var b = a.getElementsByClassName("cut")[0], c = a.getElementsByClassName("wrapper_top")[0],
+        d = a.getElementsByClassName("wrapper_bottom")[0];
+    return "none" === b.style.display || "none" === b.style.display || "hidden" === b.style.overflow ? (c.adjacent("img")[0].src = "../img/less.png", c.adjacent("span")[0].hide(), c.adjacent("span")[1].show(), d.show(), b.show()) : (c.adjacent("img")[0].src = "../img/more.png", c.adjacent("span")[1].hide(), c.adjacent("span")[0].show(), d.hide(), b.hide(), window.scroll(0, c.adjacent("img")[0].offsetTop)), !1
+}
+
+function addCutWrapping() {
+    $("span.if_show, span.if_show~*").hide(),
+        $("span.if_hide").wrap('<div class="cut-head"></div>'),
+        $("div.cut-head").prepend('<i class="fa fa-angle-down fa-2x"></i> '),
+        $("div.cut-head ~ p, img").css("padding-left", "15px"),
+        $("div.cut-head").click(
+            function () {
+                var t = $(this);
+                var parent = t.parent();
+                t.nextAll().slideToggle(),
+                    t.children(".fa-angle-down").toggleClass("fa-rotate-180"),
+                    $("span.if_show").hide();
+                if (parent.length > 0) {
+                    parent.toggleClass("visual-marging"),
+                        MathJax.Hub.Queue(["Reprocess", MathJax.Hub, parent.get(0)])
+                }
+            }
+        )
+}
+
+function addEvent(a, b, c, d) {
+    if (a.addEventListener) return a.addEventListener(b, c, d), !0;
+    if (a.attachEvent) {
+        return a.attachEvent("on" + b, c);
+    }
+    alert("Handler could not be removed");
+}
+
+function evalJSFromHtml(html) {
+    var newElement = document.createElement("div");
+    newElement.innerHTML = html;
+    for (var scripts = newElement.getElementsByTagName("script"), i = 0; i < scripts.length; ++i) {
+        var script = scripts[i];
+        eval(script.innerHTML);
+    }
+}
+
+function hideAll(a) {
+    a = $(a.parentNode);
+    var b = a.getElementsByClassName("cut")[0], c = a.getElementsByClassName("wrapper_top")[0],
+        d = a.getElementsByClassName("wrapper_bottom")[0];
+    c.adjacent("img")[0].src = "../img/more.png", c.adjacent("span")[1].hide(), c.adjacent("span")[0].show(), d.hide(), b.hide()
+}
+
+function keywords() {
+    jQuery(".toc, .keywords").on("click", "a", function () {
+        return $("html, body").animate({scrollTop: $('a[name="' + this.hash.slice(1) + '"]').offset().top}, 1e3), !1
+    });
+}
+
+function evalJSFromHtml(html) {
+    var newElement = document.createElement("div");
+    newElement.innerHTML = html;
+    for (var scripts = newElement.getElementsByTagName("script"), i = 0; i < scripts.length; ++i) {
+        var script = scripts[i];
+        eval(script.innerHTML);
+    }
+}
+
+function setupMultilangContent() {
+    var a = jQuery("div[lang=ru],div[lang=ua],div[lang=en]");
+    if (a.size() > 1) {
+        for (var b = "<div id='flags'>", c = 0; c < a.size(); c++) b += "<a href='#' lang='" + jQuery(a[c]).attr("lang") + "'></a>";
+        jQuery("#flags").remove(), b += "</div>", jQuery("div.mainContent").prepend(b);
+        var d = document.getElementById("flags").getElementsByTagName("a");
+        for (c = 0; c < d.length; c++) {
+            d[c].setAttribute("onclick", "toggleLanguage('" + d[c].lang + "')");
+            var e = document.createElement("img");
+            e.setAttribute("src", "/images/lang/" + d[c].lang + ".gif"), d[c].appendChild(e)
+        }
+        toggleLanguage(d[0].lang);
+    }
+}
+
+function showAll(a) {
+    a = $(a.parentNode);
+    var b = a.getElementsByClassName("cut")[0], c = a.getElementsByClassName("wrapper_top")[0],
+        d = a.getElementsByClassName("wrapper_bottom")[0];
+    c.adjacent("img")[0].src = "../img/less.png", c.adjacent("span")[0].hide(), c.adjacent("span")[1].show(), d.show(), b.show()
+}
+
+function autosizeFrames(){
+  $('iframe.autosize').each(function(){
+    this.height= this.contentWindow.document.body.scrollHeight;
+  });
+}
+
+
+function start() {
+    window.setTimeout(function () {
+        addCutWrapping();
+        setupMultilangContent();
+        wrapLibraryLinks();
+        autosizeFrames();
+    }, 1e3);
+}
+
+function text_if_defined(a, b) {
+    return "" == a ? b : a
+}
+
+function toggleLanguage(a) {
+    return jQuery("div[lang=ru],div[lang=ua],div[lang=en]").hide(), jQuery("div[lang=" + a + "]").show(), !1
+}
+
+function wrapLibraryLinks() {
+    jQuery("a").each(function () {
+        this.href.match(/http:\/\/lib\.sumdu\.edu\.ua\/library\/DocDownloadForm/) && (this.href = "/home/roles/download_lib?doc_url=" + encodeURIComponent(this.href))
+    }), jQuery("li").each(function () {
+        var a = this.innerHTML.match(/(http:\/\/lib\.sumdu\.edu\.ua\/library\/DocDownloadForm\?docid=\d+)/);
+        a && (this.innerHTML = this.innerHTML.replace(a[1], '<a href="/home/roles/download_lib?doc_url=' + encodeURIComponent(a[1]) + '">' + a[1] + "</a>"))
+    }), jQuery("p").each(function () {
+        var a = jQuery(this).text().match(/Режим доступу: (http:\/\/lib\.sumdu\.edu\.ua\/library\/DocDownloadForm\?docid=\d+)/);
+        a && jQuery(this).html(jQuery(this).text().replace(a[1], '<a href="/home/roles/download_lib?doc_url=' + encodeURIComponent(a[1]) + '">' + a[1] + "</a>"))
+    })
+}
+
+dynamic_css_name = [];
+var Effect = {};
+Effect.Highlight = function (a) {
+    $(a).toggle("highlight")
+};
+
+var IE = !1, IE6 = !1, IE7 = !1;
+if (window.ActiveXObject) {
+    IE = !0;
+    var uaVers = window.navigator.userAgent.substr(window.navigator.userAgent.indexOf("MSIE") + 5, 3);
+    6 == uaVers.slice(0, 1) ? IE6 = !0 : IE7 = !0
+}
+
+var Ajax = {};
+Ajax.Updater = function (a, b, c) {
+    console.log("Ajax.Updater proxy"), console.log(b), console.log(c);
+    var d = {url: b, dataType: "html", data: c.parameters}, e = $(a);
+    a = e.exists() ? e : $("#" + a), $.ajax(d).done(function (b) {
+        $(a).html(b)
+    }).done(c.onSucssess).done(c.onComplete).fail(function (b) {
+        $(a).html(b)
+    }).fail(c.onFailure)
+}, Ajax.Request = function (a, b) {
+    console.log("Ajax.Request proxy"), console.log(a), console.log(b);
+    var c = {url: a, dataType: "html", data: b.parameters};
+    $.ajax(c).done(b.onSucssess).done(b.onComplete).fail(b.onFailure)
+};
+
+var Effect = {};
+Effect.Highlight = function (a) {
+    $(a).toggle("highlight")
+};
+start();
